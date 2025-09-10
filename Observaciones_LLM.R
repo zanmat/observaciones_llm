@@ -29,19 +29,16 @@ names_lug_ori <- c('region', 'provincia', 'punto_observacion')
 main_2025[,names_lug_ori] <- lapply(main_2025[,names_lug_ori] , to_factor)
 
 main_2025 <- main_2025 |> 
-  # mutate(observaciones = paste0("Fecha: ", today, 
-  #                               " Región: ", region, 
-  #                               " Provincia: ", provincia, 
-  #                               " Punto de observación: ", punto_observacion,
-  #                               " Observaciones: ", comentarios_ob)) |> 
-  select(region, comentarios_ob) |> 
+  mutate(observaciones = paste0("Fecha: ", today,
+                                " Región: ", region,
+                                " Provincia: ", provincia,
+                                " Punto de observación: ", punto_observacion,
+                                " Observaciones: ", comentarios_ob)) |>
+  select(region, observaciones) |> 
   arrange(region) |> 
   group_by(region) |>
-  summarise(envíos = n())
-
-  summarise(comentarios_ob = paste(comentarios_ob, collapse = " \n ")) |> 
-  ungroup() |> 
-  mutate(n_char = nchar(comentarios_ob))
+  summarise(observaciones = paste(observaciones, collapse = " \n ")) |> 
+  ungroup() 
 
 options(ellmer_timeout_s = 1000)
 
