@@ -11,6 +11,8 @@ kobo_setup(url = "https://kobo.unhcr.org",
 
 RUDAH_2025 <- kobo_submissions("aEwieSotrtjeaUn6RLDCeo")
 
+names_lug_ori <- c("region", "provincia", "punto_observacion")
+
 main_2025 <- RUDAH_2025$main |> 
   filter(test_real == "registro_real") |> 
   filter(kit_orientacion == "observacion") |> 
@@ -20,15 +22,8 @@ main_2025 <- RUDAH_2025$main |>
   filter(!is.na(comentarios_ob)) |> 
   mutate(comentarios_ob = str_replace_all(comentarios_ob, "PNP", "Policía Nacional")) |> 
   mutate(comentarios_ob = str_replace_all(comentarios_ob, "PDF", "Persona desplazada")) |> 
-  mutate(comentarios_ob = str_replace_all(comentarios_ob, "NNA", "Niña, Niño o Adolescente"))
-  
-
-  #mutate(nacionalidad_observada = if_else(is.na(nacionalidad_observada), "", nacionalidad_observada))
-
-names_lug_ori <- c('region', 'provincia', 'punto_observacion')
-main_2025[,names_lug_ori] <- lapply(main_2025[,names_lug_ori] , to_factor)
-
-main_2025 <- main_2025 |> 
+  mutate(comentarios_ob = str_replace_all(comentarios_ob, "NNA", "Niña, Niño o Adolescente")) |> 
+  mutate(across(all_of(names_lug_ori), to_factor)) |> 
   mutate(observaciones = paste0("Fecha: ", today,
                                 " Región: ", region,
                                 " Provincia: ", provincia,
